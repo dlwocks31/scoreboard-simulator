@@ -44,7 +44,7 @@
 
             // Calculate the time difference in minutes
             const currentTime = new Date();
-            const differenceInMinutes = Math.floor((currentTime - startTime) / (60 * 1000));
+            const differenceInMinutes = Math.max(0, Math.floor((currentTime - startTime) / (60 * 1000)));
 
             // Update the iframe's src attribute with the new URL
             const iframeUrl = `http://static.icpckorea.net/2022/scoreboard_preliminary/?time=${differenceInMinutes}`;
