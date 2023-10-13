@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ICPC Korea Scoreboard Viewer</title>
+    <style>
+        /* Ensure iframe takes the full height of the viewport minus the height of the input and button */
+        iframe {
+            width: 100%;
+            height: calc(100vh - 50px);
+            /* Assuming that the input and button together take up 50px */
+            border: none;
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Display the contest start time (retrieved from the URL) and the button to manually update -->
+    <div>
+        Contest Start Time: <span id="displayStartTime"></span>
+        <button onclick="updateIframe()">Update Scoreboard</button>
+    </div>
+
+    <!-- Iframe to display the scoreboard -->
+    <iframe id="scoreboardIframe" src=""></iframe>
+
+    <script>
+        function getQueryParam(name) {
+            const urlParams = new URLSearchParams(window.location.search);
+            return urlParams.get(name);
+        }
+
+        function updateIframe() {
+            // Get the contest start time from the URL's query parameters
+            const startTimeString = getQueryParam('startTime');
+            document.getElementById('displayStartTime').textContent = startTimeString;
+
+            const startTimeParts = startTimeString.split(':');
+            const startTime = new Date();
+            startTime.setHours(parseInt(startTimeParts[0]), parseInt(startTimeParts[1]), 0, 0);
+
+            // Calculate the time difference in minutes
+            const currentTime = new Date();
+            const differenceInMinutes = Math.floor((currentTime - startTime) / (60 * 1000));
+
+            // Update the iframe's src attribute with the new URL
+            const iframeUrl = `http://static.icpckorea.net/2022/scoreboard_preliminary/?time=${differenceInMinutes}`;
+            document.getElementById('scoreboardIframe').src = iframeUrl;
+        }
+
+        // Initial iframe update
+        updateIframe();
+
+        // Update the iframe periodically (e.g., every minute)
+        setInterval(updateIframe, 60 * 1000);
+    </script>
+
+</body>
+
+</html>
